@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.myp.mapper.BoardMapper">
+
+
+<select id="listPage" resultType="com.myp.domain.BoardVO">
+
+<!-- 페이징 처리가된 목록 페이지 호출 -->
+<![CDATA[
+
+
+select 
+bno,title,content,writer,regdate,viewcnt
+from
+myboardd
+
+
+order by bno desc,regdate desc
+limit #{page},10
+
+
+]]>
+
+
+
+</select>
+
+<select id="listCriteria" resultType="com.myp.domain.BoardVO">
+
+<!-- 각 페이지 번호에 알맞은 데이터 호출 -->
+<![CDATA[
+
+select 
+bno,title,content,writer,regdate,viewcnt
+from
+myboardd
+
+
+order by bno desc,regdate desc
+limit #{page}, #{perPageNum}
+
+
+]]>
+
+
+</select>
+
+<select id="countPaging" resultType="int">
+
+<!-- 전체 게시글 숫자 파악 -->
+<![CDATA[
+
+select 
+count(bno)
+from
+myboardd
+where 
+bno > 0 
+
+]]>
+
+
+</select>
+
+
+
+
+
+  <insert id="create">
+
+ insert into myboardd (title, content, writer) 
+
+ values(#{title},#{content}, #{writer})
+
+ </insert>
+ <update id="updateViewCnt">
+ update myboardd
+ set viewcnt = viewcnt +1
+ where bno = #{bno}
+ </update>
+ <insert id="membermain">
+ 
+ 
+ insert into memberinfo(UserID,UserPW,UserEmail,UserAge)
+ values(#{userid},#{userpw},#{useremail},#{userage})
+ 
+
+ 
+ 
+ </insert>
+ <select id="login" resultType="com.myp.domain.Member">
+ 
+ 
+select UserID,UserPW from  memberinfo
+where UserID = #{userid} and UserPW = #{userpw};
+
+ 
+ </select>
+
+
+ 
+<select id="read" resultType="com.myp.domain.BoardVO" >
+
+ select 
+
+   bno, title, content, writer, regdate, viewcnt 
+
+ from 
+
+  myboardd
+
+ where bno = #{bno}
+
+ </select>
+
+
+
+ <update id="update">
+
+ update myboardd set title =#{title}, content =#{content} 
+
+ where bno = #{bno}
+
+ </update>
+
+
+
+ <delete id="delete">
+
+ delete from myboardd where bno = #{bno}
+
+ </delete>
+ 
+ 
+
+
+
+ <select id="listAll" resultType="com.myp.domain.BoardVO">
+
+ <![CDATA[
+
+ select 
+
+   bno, title, content, writer, regdate, viewcnt 
+
+ from 
+myboardd
+
+ where bno > 0 
+
+ order by bno desc, regdate desc
+
+ ]]>  
+
+ </select>
+
+ </mapper>
+
+
+
